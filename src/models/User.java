@@ -1,33 +1,53 @@
 package models;
 
+import java.util.HashMap;
+
+
 public class User {
-	private String prenom;
+	HashMap<String,String> erreurs;
+	
+	
+	
 	private String nom;
-	private int age;
+	private String email;
+	private String mdp;
 	
-	public User(String prenom, String nom, int age) {
+	
+	public User(String user, String email, String mdp) {
 		super();
-		this.prenom = prenom;
-		this.nom = nom;
-		this.age = age;
+		this.setNom(nom);
+		this.setEmail(email);
+		this.setMdp(mdp);
 	}
 	
-	public String getPrenom() {
-		return prenom;
+	public User() {}
+
+	
+
+	public String getEmail() {
+		return email;
 	}
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
+
+	public String getMdp() {
+		return mdp;
+	}
+
+	public void setMdp(String mdp) {
+		this.mdp = mdp;
+	}
+
 	public String getNom() {
 		return nom;
 	}
+
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
-	public int getAge() {
-		return age;
-	}
-	public void setAge(int age) {
-		this.age = age;
-	}
+	
+	
+
 }
