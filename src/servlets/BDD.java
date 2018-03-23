@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.User;
+import models.message;
 
 public class BDD {
 	
@@ -72,7 +73,7 @@ public class BDD {
         loadDatabase();
         
         try {
-            PreparedStatement preparedStatement = connexion.prepareStatement("INSERT INTO user(nom, mdp) VALUES(?, ?);");
+            PreparedStatement preparedStatement = connexion.prepareStatement("INSERT INTO user(pseudo, mdp, email) VALUES(?, ?, ?);");
             preparedStatement.setString(1, utilisateur.getNom());
             preparedStatement.setString(2, utilisateur.getMdp());
             preparedStatement.setString(3, utilisateur.getEmail());
@@ -82,5 +83,67 @@ public class BDD {
             e.printStackTrace();
         }
     }
+    
+    public ArrayList<message> recupererMessages() {
+    	ArrayList<message> lesMessages = new ArrayList<message>();
+        Statement statement = null;
+        ResultSet resultat = null;
+
+        loadDatabase();
+        
+        try {
+
+            statement = connexion.createStatement();
+
+            // Exécution de la requête
+            resultat = statement.executeQuery("SELECT * FROM messages;");
+
+            // Récupération des données
+            while (resultat.next()) {
+                int id = resultat.getInt("id");
+                String text = resultat.getString("message");
+                String pseudo = resultat.getString("user");
+                
+                message texte = new message();
+                texte.setId(id);
+                texte.setText(text);
+                texte.setPseudo(pseudo);
+                
+                lesMessages.add(texte);
+            }
+        } catch (SQLException e) {
+        } finally {
+            // Fermeture de la connexion
+            try {
+                if (resultat != null)
+                    resultat.close();
+                if (statement != null)
+                    statement.close();
+                if (connexion != null)
+                    connexion.close();
+            } catch (SQLException ignore) {
+            }
+        }
+        
+        return lesMessages;
+    }
+    
+    
+    public void envoiMessage(message unMessage) {
+        loadDatabase();
+        
+        try {
+            PreparedStatement preparedStatement = connexion.prepareStatement("INSERT INTO messages(message, user) VALUES(?, ?);");
+            preparedStatement.setString(1, unMessage.getText());
+            preparedStatement.setString(2, unMessage.getPseudo());
+            
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    
 
 }

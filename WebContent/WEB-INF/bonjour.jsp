@@ -8,17 +8,33 @@
 <link type="text/css" rel="stylesheet" href="CSS/ex.css" />
 </head>
 <body>
-<form method="post" action="connexion">
+<form method="post" action="Inscription">
 	<fieldset>
 		<legend>Connexion</legend>
-   		<label for="nom">Nom d'utilisateur</label>
-   		<input type="text" id="nom" name="nom" value="" size="20" maxlength="20" />
-   		<br />
-   		<label for="nom">Mot de passe</label>
-   		<input type="password" id="mdp" name="mdp" value="" size="20" maxlength="20" />
-   		<br />
+		<p>Vous pouvez vous connecter via ce formulaire.</p>
+		
+   		<label for="login">Nom d'utilisateur</label>
+        <input type="text" id="login" name="login" value="<c:out value="${utilisateur.nom}"/>" size="20" maxlength="20" />
+        <span class="erreur">${form.erreurs['nom']}</span>
+        <br />
+        
+        
+   		<label for="mdp">Mot de passe <span class="requis">*</span></label>
+        <input type="password" id="mdp" name="mdp" value="" size="20" maxlength="20" />
+        <span class="erreur">${form.erreurs['motdepasse']}</span>
+        <br />
+        
+        
    		<input type="submit" value="Connexion" class="sansLabel" />
    		<br />
+   		<p class="${empty form.erreurs ? 'succes' : 'erreur'}">${form.resultat}</p>
+   		
+   		<%-- Vérification de la présence d'un objet utilisateur en session --%>
+                <c:if test="${!empty sessionScope.sessionUtilisateur}">
+                    <%-- Si l'utilisateur existe en session, alors on affiche son pseudo. --%>
+                    <p class="succes">Vous êtes connecté(e) avec le pseudo : ${sessionScope.sessionUtilisateur.nom}</p>
+        		</c:if>
+                
 	</fieldset>
 </form>
 <br />
@@ -48,7 +64,7 @@
                 <span class="erreur">${form.erreurs['confirmation']}</span>
                 <br />
 
-                <input type="submit" value="Inscription" class="sansLabel" />
+                
                 <br />
                 
                 <p class="${empty form.erreurs ? 'succes' : 'erreur'}">${form.resultat}</p>

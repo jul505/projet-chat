@@ -21,6 +21,9 @@ public class InscriptionForm {
     public Map<String, String> getErreurs() {
         return erreurs;
     }
+    
+    
+/////////////////////////// Partie Inscription///////////////////////////////////////////
     public User inscrireUtilisateur( HttpServletRequest request ) {
         String email = getValeurChamp( request, CHAMP_EMAIL );
         String motDePasse = getValeurChamp( request, CHAMP_PASS );
@@ -59,6 +62,9 @@ public class InscriptionForm {
 
         return utilisateur;
     }
+    
+    
+/////////////////////////// Methode de validation///////////////////////////////////////////
     private void validationEmail( String email ) throws Exception {
         if ( email != null ) {
             if ( !email.matches( "([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)" ) ) {
@@ -82,7 +88,7 @@ public class InscriptionForm {
     }
 
     private void validationNom( String nom ) throws Exception {
-        if ( nom != null && nom.length() < 3 ) {
+        if ( nom == null || nom.length() < 3 ) {
             throw new Exception( "Le nom d'utilisateur doit contenir au moins 3 caractères." );
         }
     }
@@ -105,5 +111,45 @@ public class InscriptionForm {
         } else {
             return valeur.trim();
         }
+    }
+    
+    
+    
+    
+    
+    /////////////////////////// Partie Connexion///////////////////////////////////////////
+    private static final String CHAMP_LOGIN  = "login";
+    private static final String CHAMP_MDP   = "mdp";
+    
+    public User connecterUtilisateur( HttpServletRequest request ) {
+        /* Récupération des champs du formulaire */
+        String login = request.getParameter(CHAMP_LOGIN);
+        String mdp = request.getParameter(CHAMP_MDP);
+        
+        User utilisateur = new User();
+
+        try {
+            validationNom( login );
+        } catch ( Exception e ) {
+            setErreur( CHAMP_LOGIN, e.getMessage() );
+        }
+        utilisateur.setNom( login );
+
+        /* Validation du champ mot de passe. */
+        try {
+        	validationNom( mdp );
+        } catch ( Exception e ) {
+            setErreur( CHAMP_MDP, e.getMessage() );
+        }
+        utilisateur.setMdp( mdp );
+
+        /* Initialisation du résultat global de la validation. */
+        if ( erreurs.isEmpty() ) {
+            resultat = "Succès de la connexion.";
+        } else {
+            resultat = "Échec de la connexion.";
+        }
+
+        return utilisateur;
     }
 }
